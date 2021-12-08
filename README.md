@@ -7,7 +7,7 @@
 
 **Architecture Layer Diagram**
 
-![](/media/Clean_Architecture_diagram.png)
+![](media/Clean_Architecture_Diagram.png)
 
 **Data and Domain** - Core layers less prone to changes. As these two layers are abstract can be plugged to other platforms.
     
