@@ -1,12 +1,10 @@
 package au.com.nab
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * @author Hari Hari Sudhan. N
  */
-class BankingApplication: Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+@HiltAndroidApp
+class BankingApplication: Application()

@@ -8,8 +8,10 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.35.1'
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -21,6 +23,24 @@ allprojects {
         jcenter()
         
     }
+}
+
+ext {
+
+    rxJavaVer = "2.2.13"
+    rxAndroidVer = "2.1.1"
+    retrofitVer = "2.6.2"
+    constraintLayoutVer = "1.1.3"
+    dagger2Ver = "2.24"
+    picassoVer = "2.5.2"
+    timberVer = "4.7.1"
+
+    //androidX components version
+    appCompatVer = "1.1.0"
+    archLifeCycleVer = "2.1.0"
+    archLifeExtensionVer = "2.1.0"
+    archRoomVer = "2.2.2"
+    materialComponentVer = "1.0.0"
 }
 
 task clean(type: Delete) {
