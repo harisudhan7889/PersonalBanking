@@ -13,6 +13,7 @@ import au.com.nab.domain.DataState
 import au.com.nab.domain.LoadingState
 import au.com.nab.domain.ViewState
 import au.com.nab.domain.productlist.ProductObject
+import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.productlist.ProductListViewModel
 import au.com.nab.presentation.productdetail.ProductDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,15 +40,15 @@ class ProductListActivity: AppCompatActivity() {
             startActivity(ProductDetailActivity.getIntent(this, "084a4d49-6285-4f9d-911d-02a728cc3337"))
         }
         productListViewModel.execute()
-        productListViewModel.getProductsListener().observe(this,
-            Observer<ViewState<ProductObject>> {
+        productListViewModel.getProductListObserver().observe(this,
+            Observer<ViewState<List<ProductsEntity>>> {
                 when (it) {
                     is LoadingState -> {
                         progressBar.visibility = View.VISIBLE
                     }
                     is DataState -> {
                         it.data.run {
-                            Log.d("Products Count", "${data.products?.size ?: 0}")
+                            Log.d("Products Count", "${size}")
                             productDetail.visibility = View.VISIBLE
                             progressBar.visibility = View.GONE
                         }

@@ -2,7 +2,8 @@ package au.com.nab.di.productlist
 
 import au.com.nab.framework.productlist.ProductListDataSourceImpl
 import au.com.nab.framework.productlist.ProductListApi
-import au.com.nab.data.productlist.ProductListRepository
+import au.com.nab.framework.productlist.ProductListRepository
+import au.com.nab.framework.ProductsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,9 +27,10 @@ object ProductListRepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductListSource(productListApi: ProductListApi): ProductListDataSourceImpl {
+    fun provideProductListSource(productListApi: ProductListApi,
+                                 productsDao: ProductsDao): ProductListDataSourceImpl {
         return ProductListDataSourceImpl(
-            productListApi
+            productListApi, productsDao
         )
     }
 }

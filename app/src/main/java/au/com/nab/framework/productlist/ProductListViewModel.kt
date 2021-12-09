@@ -1,11 +1,9 @@
 package au.com.nab.framework.productlist
 
-
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import au.com.nab.domain.ViewState
-import au.com.nab.domain.productlist.ProductObject
-import au.com.nab.data.productlist.ProductListRepository
+import au.com.nab.framework.ProductsEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,5 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductListViewModel @Inject constructor(val productListRepository: ProductListRepository): ViewModel() {
     fun execute() = productListRepository.fetchProducts()
-    fun getProductsListener(): MutableLiveData<ViewState<ProductObject>> = productListRepository.getLifeCycleAwareListener()
+    fun getProductListObserver(): MutableLiveData<ViewState<List<ProductsEntity>>> = productListRepository.getObserver()
+    override fun onCleared() = productListRepository.onCleared()
 }

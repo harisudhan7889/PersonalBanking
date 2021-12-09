@@ -1,13 +1,10 @@
 package au.com.nab.data.productdetail
 
-import androidx.lifecycle.MutableLiveData
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productdetail.ProductDetailObject
+import au.com.nab.data.DataSource
 
 /**
  *@author Hari Hara Sudhan. N
  */
-interface ProductDetailDataSource {
+interface ProductDetailDataSource<O>: DataSource<O> {
     fun fetchProductById(id: String)
-    fun getLifeCycleAwareListener(): MutableLiveData<ViewState<ProductDetailObject>>
 }

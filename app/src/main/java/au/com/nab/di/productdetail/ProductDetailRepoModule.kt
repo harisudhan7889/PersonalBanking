@@ -1,10 +1,8 @@
 package au.com.nab.di.productdetail
 
-import au.com.nab.data.productdetail.ProductDetailDataSource
-import au.com.nab.data.productdetail.ProductDetailRepository
+import au.com.nab.framework.productdetail.ProductDetailRepository
 import au.com.nab.framework.productdetail.ProductDetailApi
 import au.com.nab.framework.productdetail.ProductDetailSourceImpl
-import au.com.nab.framework.productlist.ProductListDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +19,9 @@ object ProductDetailRepoModule {
     @Provides
     @Singleton
     fun provideProductDetailRepository(productDetailDataSource: ProductDetailSourceImpl): ProductDetailRepository {
-        return ProductDetailRepository(productDetailDataSource)
+        return ProductDetailRepository(
+            productDetailDataSource
+        )
     }
 
     @Provides

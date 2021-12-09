@@ -1,7 +1,6 @@
 package au.com.nab.framework.productdetail
 
 import androidx.lifecycle.ViewModel
-import au.com.nab.data.productdetail.ProductDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,5 +10,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(val productDetailRepository: ProductDetailRepository): ViewModel() {
     fun execute(productId: String) = productDetailRepository.fetchProductById(productId)
-    fun getProductDetailListener() = productDetailRepository.getLifeCycleAwareListener()
+    fun getProductDetailListener() = productDetailRepository.getObserver()
+    override fun onCleared() = productDetailRepository.onCleared()
 }
