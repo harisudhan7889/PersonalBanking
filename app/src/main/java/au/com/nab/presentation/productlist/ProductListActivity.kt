@@ -9,10 +9,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import au.com.nab.R
-import au.com.nab.domain.DataState
-import au.com.nab.domain.LoadingState
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productlist.ProductObject
+import au.com.nab.domain.common.DataState
+import au.com.nab.domain.common.LoadingState
+import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.productlist.ProductListViewModel
 import au.com.nab.presentation.productdetail.ProductDetailActivity

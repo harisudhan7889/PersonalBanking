@@ -1,9 +1,14 @@
 package au.com.nab.framework.mapper
 
-import au.com.nab.domain.Product
+import au.com.nab.domain.common.Product
 import au.com.nab.framework.AdditionalInformation
 import au.com.nab.framework.ProductsEntity
 
+/**
+ * Mapper util to map Remote DTO to Local DB DTO.
+ *
+ * @author Hari Hara Sudhan. N
+ */
 object ObjectMapper {
 
     // Nullable to Non-nullable
@@ -27,7 +32,7 @@ object ObjectMapper {
         )
     }
 
-    private fun mapRemoteAdditionalInfo(remoteAdditionalInfo: au.com.nab.domain.AdditionalInformation?): AdditionalInformation {
+    private fun mapRemoteAdditionalInfo(remoteAdditionalInfo: au.com.nab.domain.common.AdditionalInformation?): AdditionalInformation {
         return AdditionalInformation(
             remoteAdditionalInfo?.overviewUri.orEmpty(),
             remoteAdditionalInfo?.termsUri.orEmpty(),

@@ -2,7 +2,7 @@ package au.com.nab.framework.productlist
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import au.com.nab.domain.ViewState
+import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

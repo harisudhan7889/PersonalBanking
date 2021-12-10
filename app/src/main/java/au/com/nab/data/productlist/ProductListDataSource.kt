@@ -6,5 +6,13 @@ import au.com.nab.data.DataSource
  *@author Hari Hara Sudhan. N
  */
 interface ProductListDataSource<O>: DataSource<O> {
+     /**
+      * Can fetch all products.
+      * It does not return object as this should be
+      * an asynchronous background task.
+      *
+      * Fetching can be either remote network
+      * or local database call.
+      */
      fun fetchProducts()
 }

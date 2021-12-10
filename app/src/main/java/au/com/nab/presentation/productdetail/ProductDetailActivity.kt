@@ -8,11 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import au.com.nab.R
-import au.com.nab.domain.DataState
-import au.com.nab.domain.ErrorState
-import au.com.nab.domain.LoadingState
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productdetail.ProductDetailObject
+import au.com.nab.domain.common.DataState
+import au.com.nab.domain.common.ErrorState
+import au.com.nab.domain.common.LoadingState
+import au.com.nab.domain.common.ViewState
+import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.productdetail.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_product_detail.*
@@ -41,8 +41,8 @@ class ProductDetailActivity: AppCompatActivity() {
         val productId = intent.getStringExtra(PRODUCT_ID)
         productDetailViewModel.execute(productId)
         productDetailViewModel.getProductDetailListener().observe(this,
-            Observer<ViewState<ProductDetailObject>> {
-                when(it) {
+            Observer<ViewState<ProductsEntity>> {
+                when (it) {
                     is LoadingState -> {
                         progressBar.visibility = View.VISIBLE
                     }
@@ -51,7 +51,7 @@ class ProductDetailActivity: AppCompatActivity() {
                         it.data.run {
                             progressBar.visibility = View.GONE
                             productName.visibility = View.VISIBLE
-                            productName.text = "${data.name}"
+                            productName.text = name
                         }
                     }
 
@@ -59,7 +59,7 @@ class ProductDetailActivity: AppCompatActivity() {
                         progressBar.visibility = View.GONE
                         productName.visibility = View.VISIBLE
                         it.error.run {
-                            productName.text = "$message"
+                            productName.text = message
                         }
                     }
                 }

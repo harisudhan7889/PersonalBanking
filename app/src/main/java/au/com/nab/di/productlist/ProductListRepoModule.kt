@@ -11,11 +11,14 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
+ * Provides the required repository with data source implementation object.
+ *
+ * @see ProductListApiModule - Has methods to fetch all the products.
  * @author Hari Hara Sudhan. N
  */
 @Module(includes = [ProductListApiModule::class])
 @InstallIn(SingletonComponent::class)
-object ProductListRepositoryModule {
+object ProductListRepoModule {
 
     @Provides
     @Singleton

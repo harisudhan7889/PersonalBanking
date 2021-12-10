@@ -1,4 +1,4 @@
-package au.com.nab.domain
+package au.com.nab.domain.common
 
 /**
  * @author Hari Hara Sudhan.N

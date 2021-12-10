@@ -3,10 +3,10 @@ package au.com.nab.framework.productlist
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import au.com.nab.data.productlist.ProductListDataSource
-import au.com.nab.domain.DataState
-import au.com.nab.domain.ErrorState
-import au.com.nab.domain.LoadingState
-import au.com.nab.domain.ViewState
+import au.com.nab.domain.common.DataState
+import au.com.nab.domain.common.ErrorState
+import au.com.nab.domain.common.LoadingState
+import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsDao
 import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.mapper.ObjectMapper.mapNullInputList
@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
- * Framework layer where implementation will be happen
+ * Class that implements the abstract source defined in the inner domain layer.
  *
  * @author Hari Hara Sudhan. N
  */
@@ -30,9 +30,9 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
 
     private val productsListener = MutableLiveData<ViewState<List<ProductsEntity>>>()
     private val roomProductsLiveData by lazy {
-        productDao.readAll()
+        productDao.readAllProducts()
     }
-    private val roomProductsObserver = Observer<List<ProductsEntity>>{
+    private val roomProductsLiveDataObserver = Observer<List<ProductsEntity>>{
         productsListener.value = DataState(it)
     }
 
@@ -50,7 +50,7 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
                         mapRemoteProduct(remoteProduct)
                     }
                 }
-                productDao.insertAll(products)
+                productDao.insertAllProducts(products)
                 Single.just(products)
             }
             .subscribeOn(Schedulers.io())
@@ -67,20 +67,24 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
                 }
 
                 override fun onSubscribe(disposable: Disposable) {
-                    productsListener.value = LoadingState(null)
+                    productsListener.value =
+                        LoadingState(null)
                 }
             })
     }
 
     private fun fetchFromDb() {
         if (!roomProductsLiveData.hasActiveObservers()) {
-            roomProductsLiveData.observeForever(roomProductsObserver)
+            roomProductsLiveData.observeForever(roomProductsLiveDataObserver)
         }
     }
 
     override fun getObserver() =  productsListener
 
+    /**
+     * Unsubscribe and clear the resources.
+     */
     override fun onCleared() {
-        roomProductsLiveData.removeObserver(roomProductsObserver)
+        roomProductsLiveData.removeObserver(roomProductsLiveDataObserver)
     }
 }

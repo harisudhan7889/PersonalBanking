@@ -6,6 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 /**
+ * Provide method to get detail of a product.
+ *
  * @author Hari Hara Sudhan. N
  */
 interface ProductDetailApi {

@@ -1,6 +1,9 @@
-package au.com.nab.domain
+package au.com.nab.domain.common
 
 /**
+ * Wrapper state object used to wrap the success, error and subscribe results
+ * for view's consumption.
+ *
  * @author Hari Hara Sudhan.N
  */
 sealed class ViewState<T> {

@@ -1,7 +1,11 @@
 package au.com.nab.framework
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 
 /**
  * @author Hari Hara Sudhan. N
@@ -10,18 +14,18 @@ import androidx.room.*
 interface ProductsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(products: List<ProductsEntity>)
+    fun insertAllProducts(products: List<ProductsEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(product: ProductsEntity)
+    fun insertProduct(product: ProductsEntity)
 
     @Query("Select * from products")
-    fun readAll(): LiveData<List<ProductsEntity>>
+    fun readAllProducts(): LiveData<List<ProductsEntity>>
 
     @Update
-    fun update(product: ProductsEntity)
+    fun updateProduct(product: ProductsEntity)
 
     @Query("Select * from products WHERE productId = :productId")
-    fun readById(productId: String): LiveData<ProductsEntity>
+    fun readProductById(productId: String): LiveData<ProductsEntity>
 
 }

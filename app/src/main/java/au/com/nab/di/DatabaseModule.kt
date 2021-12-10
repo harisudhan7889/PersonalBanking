@@ -11,6 +11,8 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
+ * Module class tha provides the database.
+ *
  * @author Hari Hara Sudhan. N
  */
 @InstallIn(SingletonComponent::class)

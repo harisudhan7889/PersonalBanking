@@ -1,6 +1,6 @@
 package au.com.nab.domain.productlist
 
-import au.com.nab.domain.Product
+import au.com.nab.domain.common.Product
 
 /**
  *@author Hari Hara Sudhan. N

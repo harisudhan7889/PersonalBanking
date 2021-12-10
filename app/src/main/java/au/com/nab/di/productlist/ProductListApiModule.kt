@@ -10,6 +10,11 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 /**
+ * Provides the endpoint object for product related network services.
+ *
+ * @see ProductListApi
+ * @see ProductClientModule - Provides the retrofit object.
+ *
  * @author Hari Hara Sudhan. N
  */
 @Module(includes = [ProductClientModule::class])
