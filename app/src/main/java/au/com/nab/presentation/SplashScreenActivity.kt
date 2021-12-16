@@ -1,21 +1,26 @@
 package au.com.nab.presentation
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import au.com.nab.R
 import au.com.nab.presentation.productlist.ProductListActivity
-import kotlinx.android.synthetic.main.activity_launch_screen.*
 
 /**
  * @author Hari Hari Sudhan. N
  */
-class LaunchScreenActivity : AppCompatActivity() {
+class SplashScreenActivity : AppCompatActivity() {
+
+    companion object {
+        private const val WAIT_TIME = 2000L
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_launch_screen)
-        initiateEvent.setOnClickListener {
+        setContentView(R.layout.activity_splash_screen)
+        Handler().postDelayed({
             startActivity(ProductListActivity.getIntent(this))
-        }
+            finish()
+        }, WAIT_TIME)
     }
 }

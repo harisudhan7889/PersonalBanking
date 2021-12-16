@@ -9,9 +9,9 @@ import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsDao
 import au.com.nab.framework.ProductsEntity
-import au.com.nab.framework.mapper.ObjectMapper.mapNullInputList
-import au.com.nab.framework.mapper.ObjectMapper.mapRemoteProduct
-import au.com.nab.framework.mapper.ObjectMapper.mapRemoteProducts
+import au.com.nab.framework.utility.ObjectMapper.mapNullInputList
+import au.com.nab.framework.utility.ObjectMapper.mapRemoteProduct
+import au.com.nab.framework.utility.ObjectMapper.mapRemoteProducts
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,11 +32,13 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
     private val roomProductsLiveData by lazy {
         productDao.readAllProducts()
     }
+
     private val roomProductsLiveDataObserver = Observer<List<ProductsEntity>>{
         productsListener.value = DataState(it)
     }
 
     override fun fetchProducts() {
+        //http://jsonblob.com/919227149077200896
         fetchFromDb()
         fetchFromRemote()
     }

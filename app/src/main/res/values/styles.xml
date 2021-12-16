@@ -8,4 +8,84 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Light">
+        <item name="android:colorBackground">#ffffff</item>
+    </style>
+
+    <style name="AppTheme.Light.NoActionBar" parent="Theme.Design.Light.NoActionBar"/>
+
+
+    <style name="AppTheme.Light.ExpandedToolbarTitle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="AppTheme.Light.NumberLabel">
+        <item name="android:background">@drawable/ic_red_circle</item>
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:textSize">@dimen/nab_text_size_m</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AppTheme.Light.Text">
+        <item name="android:typeface">sans</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/nab_text_size_m</item>
+    </style>
+
+    <style name="AppTheme.Light.Label" parent="AppTheme.Light.Text">
+        <item name="android:typeface">sans</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.Light.Button">
+        <item name="android:typeface">sans</item>
+        <item name="android:textSize">@dimen/nab_text_size_s</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/bg_rounded_corner</item>
+    </style>
+
+    <style name="AppTheme.ProductDescription">
+        <item name="android:typeface">sans</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">@dimen/nab_text_size_s</item>
+    </style>
+
+    <style name="AppTheme.HorizontalDivider">
+        <item name="android:background">@color/colorDividerBg</item>
+    </style>
+
+    <style name="AppTheme.GroupProductLabel">
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/nab_text_size_l</item>
+    </style>
+
+    <style name="AppTheme.ProductCategoryTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/nab_text_size_l</item>
+    </style>
+
+    <style name="AppTheme.Light.ToolbarTheme">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_white_24dp</item>
+        <item name="android:elevation">@dimen/nab_toolbar_elevation</item>
+    </style>
+
+    <style name="AppTheme.Light.SplashTitle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textSize">@dimen/nab_text_size_l</item>
+    </style>
 </resources>

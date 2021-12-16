@@ -3,18 +3,9 @@ package au.com.nab.presentation.productlist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.activity.viewModels
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import au.com.nab.R
-import au.com.nab.domain.common.DataState
-import au.com.nab.domain.common.LoadingState
-import au.com.nab.domain.common.ViewState
-import au.com.nab.framework.ProductsEntity
-import au.com.nab.framework.productlist.ProductListViewModel
-import au.com.nab.presentation.productdetail.ProductDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_product_list.*
 
@@ -23,8 +14,6 @@ import kotlinx.android.synthetic.main.activity_product_list.*
  */
 @AndroidEntryPoint
 class ProductListActivity: AppCompatActivity() {
-
-    private val productListViewModel: ProductListViewModel by viewModels()
 
     companion object {
         fun getIntent(context: Context): Intent {
@@ -35,27 +24,22 @@ class ProductListActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_list)
-        productDetail.setOnClickListener {
-            startActivity(ProductDetailActivity.getIntent(this, "084a4d49-6285-4f9d-911d-02a728cc3337"))
+        initializeToolbar()
+    }
+
+    private fun initializeToolbar() {
+        toolbar.title = resources.getText(R.string.nab_product_list_title)
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
         }
-        productListViewModel.execute()
-        productListViewModel.getProductListObserver().observe(this,
-            Observer<ViewState<List<ProductsEntity>>> {
-                when (it) {
-                    is LoadingState -> {
-                        progressBar.visibility = View.VISIBLE
-                    }
-                    is DataState -> {
-                        it.data.run {
-                            Log.d("Products Count", "${size}")
-                            productDetail.visibility = View.VISIBLE
-                            progressBar.visibility = View.GONE
-                        }
-                    }
-                    is Error -> {
-                        progressBar.visibility = View.GONE
-                    }
-                }
-            })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

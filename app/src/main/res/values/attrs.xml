@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="nabToolbarScrimColor" format="color"/>
+    <attr name="nabToolbarBackground" format="reference"/>
+    <attr name="nabExpandedTitleAppearance" format="reference"/>
+    <attr name="nabCollapseToolbarImage" format="reference"/>
+    <attr name="nabAppBarElevation" format="dimension"/>
+    <attr name="nabAppBarTheme" format="reference"/>
+    <attr name="nabDrawableCut" format="reference"/>
+    <attr name="nabProductItemTitleColor" format="color"/>
+    <attr name="nabItemNumberLabelStyle" format="reference"/>
+    <attr name="nabItemTextLabelStyle" format="reference"/>
+    <attr name="nabItemLabelStyle" format="reference"/>
+    <attr name="nabItemBackground" format="reference"/>
+    <attr name="nabProductButtonStyle" format="reference"/>
+    <attr name="nabProductDescriptionStyle" format="reference"/>
+    <attr name="nabHorizontalDividerLine" format="reference"/>
+    <attr name="nabProductTitleStyle" format="reference"/>
+    <attr name="nabProductCategoryTitleStyle" format="reference"/>
+    <attr name="nabHomeButton" format="reference"/>
+    <attr name="nabSplashScreenTitle" format="reference"/>
+</resources>

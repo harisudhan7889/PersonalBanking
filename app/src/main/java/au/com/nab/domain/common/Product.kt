@@ -18,11 +18,11 @@ data class AdditionalInformation(
     val eligibilityUri: String?, val feesAndPricingUri: String?
 )
 
-data class Feature(val featureType: String?, val additionalInfo: String?)
+data class Feature(val featureType: String?, val additionalInfo: String?, val additionalValue: String?)
 
 data class Constraint(val constraintType: String?, val additionalValue: String?)
 
-data class Eligibility(val eligibilityType: String?, val additionalValue: String?)
+data class Eligibility(val eligibilityType: String?, val additionalValue: String?, val additionalInfo: String?)
 
 data class Fee(val name: String?, val feeType: String?, val amount: String?,
                val balanceRate: String?, val transactionRate: String?,
@@ -30,4 +30,5 @@ data class Fee(val name: String?, val feeType: String?, val amount: String?,
 
 data class LendingRate(val lendingRateType: String?, val rate: String?, val comparisonRate: String?,
                        val calculationFrequency: String?, val applicationFrequency: String?,
-                       val interestPaymentDue: String?, val additionalInfoUri: String?)
+                       val interestPaymentDue: String?, val additionalInfoUri: String?,
+                       val additionalInfo: String?, val additionalValue: String?)

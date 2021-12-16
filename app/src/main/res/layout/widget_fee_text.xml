@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="?attr/nabItemBackground"
+    android:weightSum="5"
+    android:padding="@dimen/nab_margin_l">
+
+    <TextView
+        android:id="@+id/feeName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        style="?attr/nabItemTextLabelStyle"
+        android:layout_weight="3.5"
+        tools:text="Application Fee"/>
+
+    <TextView
+        android:id="@+id/feeValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="?attr/nabItemTextLabelStyle"
+        android:gravity="center"
+        android:layout_weight="1.5"
+        tools:text="150 AUD"/>
+
+</LinearLayout>

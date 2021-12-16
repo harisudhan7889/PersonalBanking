@@ -4,6 +4,7 @@ import au.com.nab.framework.productlist.ProductListDataSourceImpl
 import au.com.nab.framework.productlist.ProductListApi
 import au.com.nab.framework.productlist.ProductListRepository
 import au.com.nab.framework.ProductsDao
+import au.com.nab.framework.productlist.ProductListGroup
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

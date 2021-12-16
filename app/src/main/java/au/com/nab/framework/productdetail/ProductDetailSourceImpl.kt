@@ -8,11 +8,11 @@ import au.com.nab.domain.common.DataState
 import au.com.nab.domain.common.ErrorState
 import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
+import au.com.nab.framework.ProductData
 import au.com.nab.framework.ProductsDao
-import au.com.nab.framework.ProductsEntity
-import au.com.nab.framework.mapper.ObjectMapper
-import io.reactivex.Single
-import io.reactivex.SingleObserver
+import au.com.nab.framework.utility.ObjectMapper
+import io.reactivex.Completable
+import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -25,13 +25,13 @@ import javax.inject.Inject
  */
 class ProductDetailSourceImpl @Inject constructor(val productDetailApi: ProductDetailApi,
                                                   val productDao: ProductsDao):
-    ProductDetailDataSource<ViewState<ProductsEntity>> {
+    ProductDetailDataSource<ViewState<ProductData>> {
 
-    private val productListener = MutableLiveData<ViewState<ProductsEntity>>()
+    private val productListener = MutableLiveData<ViewState<ProductData>>()
 
-    private var dbProductObserver: LiveData<ProductsEntity>? = null
+    private var dbProductObserver: LiveData<ProductData>? = null
 
-    private val roomProductObserver = Observer<ProductsEntity>{
+    private val roomProductObserver = Observer<ProductData>{
         productListener.value = DataState(it)
     }
 
@@ -46,17 +46,50 @@ class ProductDetailSourceImpl @Inject constructor(val productDetailApi: ProductD
     }
 
     private fun fetchProductFromRemote(productId: String) {
-        productDetailApi.getProductById(productId).flatMap {
+        productDetailApi.getProductById(productId).flatMapCompletable {
             val product = ObjectMapper.mapRemoteProduct(it.data)
-            productDao.updateProduct(product)
-            Single.just(product)
+
+            val productFeature =
+                ObjectMapper.mapRemoteProductFeatures(it.data.features) { remoteFeatures ->
+                    ObjectMapper.mapNullInputList(remoteFeatures) { remoteFeature ->
+                        ObjectMapper.mapRemoteFeature(productId, remoteFeature)
+                    }
+                }
+
+            val productFee = ObjectMapper.mapRemoteProductFees(it.data.fees) { remoteFees ->
+                ObjectMapper.mapNullInputList(remoteFees) { remoteFee ->
+                    ObjectMapper.mapRemoteFee(productId, remoteFee)
+                }
+            }
+
+            val productEligibility =
+                ObjectMapper.mapRemoteProductEligibility(it.data.eligibility) { remoteEligibilities ->
+                    ObjectMapper.mapNullInputList(remoteEligibilities) { remoteEligibility ->
+                        ObjectMapper.mapRemoteEligibility(productId, remoteEligibility)
+                    }
+                }
+
+            val productLendingRates =
+                ObjectMapper.mapRemoteProductLendingRate(it.data.lendingRates) { remoteLendingRates ->
+                    ObjectMapper.mapNullInputList(remoteLendingRates) { remoteLendingRate ->
+                        ObjectMapper.mapRemoteLendingRate(productId, remoteLendingRate)
+                    }
+                }
+
+            productDao.insertProductDetails(
+                product,
+                productFee,
+                productFeature,
+                productEligibility,
+                productLendingRates
+            )
+            Completable.complete()
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<ProductsEntity> {
-                override fun onSuccess(product: ProductsEntity) {
-                    // Successful response leads to a entry in the room db that triggers
-                    // the live data listener
+            .subscribe(object : CompletableObserver {
+                override fun onComplete() {
+
                 }
 
                 override fun onSubscribe(disposable: Disposable) {

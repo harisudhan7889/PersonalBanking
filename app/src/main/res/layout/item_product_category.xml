@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:id="@+id/rootView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/nab_margin_vs"
+    android:layout_marginRight="@dimen/nab_margin_vs"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="@dimen/nab_margin_vs"
+    card_view:cardElevation="@dimen/nab_margin_vs"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardPreventCornerOverlap="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/nab_margin_m">
+
+        <FrameLayout
+            android:id="@+id/imgViewHolder"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/nab_category_card_image_height"
+            android:layout_gravity="top">
+
+            <ImageView
+                android:id="@+id/imgItem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/productCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nab_margin_vs"
+            android:layout_marginLeft="@dimen/nab_margin_m"
+            android:layout_marginRight="@dimen/nab_margin_m"
+            style="?attr/nabProductCategoryTitleStyle"
+            tools:text="Item test text" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
