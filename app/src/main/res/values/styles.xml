@@ -28,7 +28,7 @@
         <item name="android:textColor">@android:color/holo_red_dark</item>
         <item name="android:textStyle">bold</item>
         <item name="android:typeface">sans</item>
-        <item name="android:textSize">@dimen/nab_text_size_m</item>
+        <item name="android:textSize">@dimen/nab_text_size_s</item>
         <item name="android:gravity">center</item>
     </style>
 

@@ -12,8 +12,7 @@ import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.utility.ObjectMapper.mapNullInputList
 import au.com.nab.framework.utility.ObjectMapper.mapRemoteProduct
 import au.com.nab.framework.utility.ObjectMapper.mapRemoteProducts
-import io.reactivex.Single
-import io.reactivex.SingleObserver
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -38,7 +37,6 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
     }
 
     override fun fetchProducts() {
-        //http://jsonblob.com/919227149077200896
         fetchFromDb()
         fetchFromRemote()
     }
@@ -46,19 +44,19 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
     private fun fetchFromRemote() {
         productListApi
             .getBankingProducts()
-            .flatMap {
+            .flatMapCompletable {
                 val products = mapRemoteProducts(it.data.products) { remoteProducts ->
                     mapNullInputList(remoteProducts) { remoteProduct ->
                         mapRemoteProduct(remoteProduct)
                     }
                 }
                 productDao.insertAllProducts(products)
-                Single.just(products)
+                Completable.complete()
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<List<ProductsEntity>> {
-                override fun onSuccess(response: List<ProductsEntity>) {
+            .subscribe(object : CompletableObserver {
+                override fun onComplete() {
                     // Successful response leads to a entry in the room db that triggers
                     // the live data listener
                 }

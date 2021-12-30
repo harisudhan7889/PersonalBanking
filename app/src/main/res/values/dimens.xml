@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="nab_collapse_app_bar_height">200dp</dimen>
-    <dimen name="nab_toolbar_image_width">250dp</dimen>
-    <dimen name="nab_toolbar_image_height">100dp</dimen>
-    <dimen name="nab_category_card_image_height">200dp</dimen>
-    <dimen name="nab_toolbar_elevation">4dp</dimen>
-    <dimen name="nab_progress_bar_height">50dp</dimen>
+    <dimen name="nab_collapse_app_bar_height">@dimen/_200sdp</dimen>
+    <dimen name="nab_toolbar_image_width">@dimen/_250sdp</dimen>
+    <dimen name="nab_toolbar_image_height">@dimen/_100sdp</dimen>
+    <dimen name="nab_category_card_image_height">@dimen/_150sdp</dimen>
+    <dimen name="nab_toolbar_elevation">@dimen/_4sdp</dimen>
+    <dimen name="nab_progress_bar_height">@dimen/_50sdp</dimen>
 
     <!-- Font size sets -->
-    <dimen name="nab_text_size_s">16sp</dimen>
-    <dimen name="nab_text_size_m">18sp</dimen>
-    <dimen name="nab_text_size_l">20sp</dimen>
-    <dimen name="nab_text_size_xl">28sp</dimen>
-    <dimen name="nab_text_size_xxl">40sp</dimen>
+    <dimen name="nab_text_size_s">@dimen/_14ssp</dimen>
+    <dimen name="nab_text_size_m">@dimen/_16ssp</dimen>
+    <dimen name="nab_text_size_l">@dimen/_18ssp</dimen>
+    <dimen name="nab_text_size_xl">@dimen/_26ssp</dimen>
+    <dimen name="nab_text_size_xxl">@dimen/_38ssp</dimen>
 
     <!-- Margins and padding sets -->
-    <dimen name="nab_margin_vs">4dp</dimen>
-    <dimen name="nab_margin_s">8dp</dimen>
-    <dimen name="nab_margin_m">10dp</dimen>
-    <dimen name="nab_margin_l">16dp</dimen>
-    <dimen name="nab_margin_xl">20dp</dimen>
-    <dimen name="nab_margin_xxl">30dp</dimen>
-
+    <dimen name="nab_margin_vs">@dimen/_4sdp</dimen>
+    <dimen name="nab_margin_s">@dimen/_8sdp</dimen>
+    <dimen name="nab_margin_m">@dimen/_10sdp</dimen>
+    <dimen name="nab_margin_l">@dimen/_16sdp</dimen>
+    <dimen name="nab_margin_xl">@dimen/_20sdp</dimen>
+    <dimen name="nab_margin_xxl">@dimen/_30sdp</dimen>
 </resources>
