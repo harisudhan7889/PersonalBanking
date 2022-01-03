@@ -1,8 +1,7 @@
 package au.com.nab.framework.productdetail
 
 import au.com.nab.data.productdetail.ProductDetailDataSource
-import au.com.nab.domain.common.ViewState
-import au.com.nab.framework.ProductData
+import au.com.nab.framework.DbProductEncapsuler
 import javax.inject.Inject
 
 /**
@@ -12,8 +11,9 @@ import javax.inject.Inject
  * @author Hari Hara Sudhan. N
  */
 class ProductDetailRepository @Inject constructor(val productDetailDataSource
-                                                  : ProductDetailDataSource<ViewState<ProductData>>) {
+                                                  : ProductDetailDataSource<DbProductEncapsuler>) {
     fun fetchProductById(productId: String) = productDetailDataSource.fetchProductById(productId)
     fun getObserver() = productDetailDataSource.getObserver()
     fun onCleared() = productDetailDataSource.onCleared()
+    fun cacheProduct(product: DbProductEncapsuler) = productDetailDataSource.cache(product)
 }

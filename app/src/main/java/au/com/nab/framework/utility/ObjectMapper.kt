@@ -31,13 +31,13 @@ object ObjectMapper {
             remoteProduct.isTailored ?: false)
     }
 
-    fun mapRemoteProductFeatures(remoteProductFeatures: List<au.com.nab.domain.common.Feature>?,
+    private fun mapRemoteProductFeatures(remoteProductFeatures: List<au.com.nab.domain.common.Feature>?,
                                          mapRemoteProductFeatures: (List<au.com.nab.domain.common.Feature>?) -> List<Feature>): List<Feature> {
 
         return mapRemoteProductFeatures(remoteProductFeatures)
     }
 
-    fun mapRemoteFeature(productId: String, remoteFeature: au.com.nab.domain.common.Feature): Feature {
+    private fun mapRemoteFeature(productId: String, remoteFeature: au.com.nab.domain.common.Feature): Feature {
         return remoteFeature.run {
             Feature("$productId:feature:${featureType.orEmpty()}", productId, featureType.orEmpty(),
                 additionalInfo.orEmpty(),
@@ -45,13 +45,13 @@ object ObjectMapper {
         }
     }
 
-    fun mapRemoteProductFees(remoteProductFees: List<au.com.nab.domain.common.Fee>?,
+    private fun mapRemoteProductFees(remoteProductFees: List<au.com.nab.domain.common.Fee>?,
                                      mapRemoteProductFees: (List<au.com.nab.domain.common.Fee>?) -> List<Fee>): List<Fee> {
 
         return mapRemoteProductFees(remoteProductFees)
     }
 
-    fun mapRemoteFee(productId: String, remoteFee: au.com.nab.domain.common.Fee): Fee {
+    private fun mapRemoteFee(productId: String, remoteFee: au.com.nab.domain.common.Fee): Fee {
         return remoteFee.run {
             Fee("$productId:fee:$feeType", productId, name.orEmpty(),
                 feeType.orEmpty(),
@@ -64,7 +64,7 @@ object ObjectMapper {
         }
     }
 
-    fun mapRemoteProductEligibility(
+    private fun mapRemoteProductEligibility(
         remoteProductEligibility: List<au.com.nab.domain.common.Eligibility>?,
         mapRemoteProductEligibility: (List<au.com.nab.domain.common.Eligibility>?) -> List<Eligibility>
     ): List<Eligibility> {
@@ -72,27 +72,67 @@ object ObjectMapper {
         return mapRemoteProductEligibility(remoteProductEligibility)
     }
 
-    fun mapRemoteEligibility(productId: String, remoteEligibility: au.com.nab.domain.common.Eligibility): Eligibility {
+    private fun mapRemoteEligibility(productId: String, remoteEligibility: au.com.nab.domain.common.Eligibility): Eligibility {
         return remoteEligibility.run {
             Eligibility("$productId:eligibility:${eligibilityType.orEmpty()}", productId, eligibilityType.orEmpty(),
                 additionalValue.orEmpty(), additionalInfo.orEmpty())
         }
     }
 
-    fun mapRemoteProductLendingRate(
+    private fun mapRemoteProductLendingRate(
         remoteProductLendingRates: List<au.com.nab.domain.common.LendingRate>?,
         mapRemoteProductLendingRates: (List<au.com.nab.domain.common.LendingRate>?) -> List<LendingRate>
     ): List<LendingRate> {
         return mapRemoteProductLendingRates(remoteProductLendingRates)
     }
 
-    fun mapRemoteLendingRate(productId: String, remoteLendingRate: au.com.nab.domain.common.LendingRate): LendingRate {
+    private fun mapRemoteLendingRate(productId: String, remoteLendingRate: au.com.nab.domain.common.LendingRate): LendingRate {
         return remoteLendingRate.run {
             LendingRate("$productId:rate:${lendingRateType.orEmpty()}", productId,
                 lendingRateType.orEmpty(), rate.orEmpty(),
                 comparisonRate.orEmpty(), interestPaymentDue.orEmpty(),
                 additionalInfo.orEmpty(), additionalValue.orEmpty())
         }
+    }
+
+    fun mapRemoteToLocalProduct(product: Product): DbProductEncapsuler {
+        val productObject = mapRemoteProduct(product)
+
+        val productFeature =
+            mapRemoteProductFeatures(product.features) { remoteFeatures ->
+                mapNullInputList(remoteFeatures) { remoteFeature ->
+                    mapRemoteFeature(productObject.productId, remoteFeature)
+                }
+            }
+
+        val productFee = mapRemoteProductFees(product.fees) { remoteFees ->
+            mapNullInputList(remoteFees) { remoteFee ->
+                mapRemoteFee(productObject.productId, remoteFee)
+            }
+        }
+
+        val productEligibility =
+            mapRemoteProductEligibility(product.eligibility) { remoteEligibilities ->
+                mapNullInputList(remoteEligibilities) { remoteEligibility ->
+                    mapRemoteEligibility(productObject.productId, remoteEligibility)
+                }
+            }
+
+        val productLendingRates =
+            mapRemoteProductLendingRate(product.lendingRates) { remoteLendingRates ->
+                mapNullInputList(remoteLendingRates) { remoteLendingRate ->
+                    mapRemoteLendingRate(productObject.productId, remoteLendingRate)
+                }
+            }
+
+        val productData = DbProductEncapsuler()
+        productData.productsEntity = productObject
+        productData.features = productFeature
+        productData.fees = productFee
+        productData.eligibility = productEligibility
+        productData.lendingRate = productLendingRates
+
+        return productData
     }
 
 }

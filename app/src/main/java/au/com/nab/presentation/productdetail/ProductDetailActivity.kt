@@ -13,7 +13,7 @@ import au.com.nab.domain.common.DataState
 import au.com.nab.domain.common.ErrorState
 import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
-import au.com.nab.framework.ProductData
+import au.com.nab.framework.DbProductEncapsuler
 import au.com.nab.framework.productdetail.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_product_detail.*
@@ -58,7 +58,7 @@ class ProductDetailActivity: AppCompatActivity() {
 
         productDetailViewModel.execute(productId)
         productDetailViewModel.getProductDetailListener().observe(this,
-            Observer<ViewState<ProductData>>{
+            Observer<ViewState<DbProductEncapsuler>>{
                 when (it) {
                     is LoadingState -> {
                         progressBar.visibility = View.VISIBLE
@@ -79,7 +79,7 @@ class ProductDetailActivity: AppCompatActivity() {
             })
     }
 
-    private fun ProductData.bindDataToView() {
+    private fun DbProductEncapsuler.bindDataToView() {
         if (eligibility.isNotEmpty()) {
             eligibilityView.visibility = View.VISIBLE
             eligibilityView.bindData(eligibility)

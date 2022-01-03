@@ -47,5 +47,5 @@ interface ProductsDao {
 
     @Transaction
     @Query("Select * from products WHERE productId = :productId")
-    fun readProductById(productId: String): LiveData<ProductData>
+    fun readProductById(productId: String): LiveData<DbProductEncapsuler>
 }

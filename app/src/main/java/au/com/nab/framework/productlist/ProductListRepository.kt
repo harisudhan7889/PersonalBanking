@@ -1,7 +1,6 @@
 package au.com.nab.framework.productlist
 
 import au.com.nab.data.productlist.ProductListDataSource
-import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsEntity
 import javax.inject.Inject
 
@@ -12,9 +11,10 @@ import javax.inject.Inject
  * @author Hari Hara Sudhan. N
  */
 class ProductListRepository @Inject constructor(val productListDataSource
-                                                : ProductListDataSource<ViewState<List<ProductsEntity>>>
+                                                : ProductListDataSource<List<ProductsEntity>>
 ) {
     fun fetchProducts() = productListDataSource.fetchProducts()
     fun getObserver() = productListDataSource.getObserver()
     fun onCleared() = productListDataSource.onCleared()
+    fun cacheProducts(products: List<ProductsEntity>) = productListDataSource.cache(products)
 }

@@ -9,6 +9,10 @@ import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -34,7 +38,23 @@ class ProductListViewModel @Inject constructor(val productListRepository: Produc
        }
     }
 
-    fun execute() = productListRepository.fetchProducts()
+    fun execute() {
+        productListRepository.fetchProducts().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : SingleObserver<List<ProductsEntity>> {
+                override fun onError(error: Throwable) {
+                    getProductsObserver().value =
+                        ErrorState(error, null)
+                }
+                override fun onSubscribe(disposable: Disposable) {
+                    getProductsObserver().value =
+                        LoadingState(null)
+                }
+                override fun onSuccess(products: List<ProductsEntity>) {
+                    productListRepository.cacheProducts(products)
+                }
+            })
+    }
 
     /**
      * Gets the products without any grouping. Raw product list.

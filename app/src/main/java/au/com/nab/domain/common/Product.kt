@@ -4,13 +4,13 @@ package au.com.nab.domain.common
  * @author Hari Hara Sudhan.N
  */
 data class Product(
-    val productId: String?, val lastUpdated: String?,
-    val productCategory: String?, val name: String?,
-    val description: String?, val brand: String?,
-    val isTailored: Boolean? = false, val additionalInformation: AdditionalInformation?,
-    val features: List<Feature>?, val constraints: List<Constraint>?,
-    val eligibility: List<Eligibility>,
-    val fees: List<Fee>?, val lendingRates: List<LendingRate>?
+    val productId: String? = null, val lastUpdated: String? = null,
+    val productCategory: String? = null, val name: String? = null,
+    val description: String? = null, val brand: String? = null,
+    val isTailored: Boolean? = false , val additionalInformation: AdditionalInformation? = null,
+    val features: List<Feature>? = null, val constraints: List<Constraint>? = null,
+    val eligibility: List<Eligibility>? = null,
+    val fees: List<Fee>? = null, val lendingRates: List<LendingRate>? = null
 )
 
 data class AdditionalInformation(

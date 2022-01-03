@@ -1,19 +1,18 @@
 package au.com.nab.framework.productlist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import au.com.nab.data.productlist.ProductListDataSource
 import au.com.nab.domain.common.DataState
-import au.com.nab.domain.common.ErrorState
-import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsDao
 import au.com.nab.framework.ProductsEntity
 import au.com.nab.framework.utility.ObjectMapper.mapNullInputList
 import au.com.nab.framework.utility.ObjectMapper.mapRemoteProduct
 import au.com.nab.framework.utility.ObjectMapper.mapRemoteProducts
-import io.reactivex.*
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -23,59 +22,37 @@ import javax.inject.Inject
  *
  * @author Hari Hara Sudhan. N
  */
-class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductListApi,
+open class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductListApi,
                                                     val productDao: ProductsDao)
-    : ProductListDataSource<ViewState<List<ProductsEntity>>> {
+    : ProductListDataSource<List<ProductsEntity>> {
 
     private val productsListener = MutableLiveData<ViewState<List<ProductsEntity>>>()
-    private val roomProductsLiveData by lazy {
-        productDao.readAllProducts()
-    }
+    private var roomProductsLiveData: LiveData<List<ProductsEntity>>? = productDao.readAllProducts()
+    private var disposable: Disposable? = null
 
-    private val roomProductsLiveDataObserver = Observer<List<ProductsEntity>>{
+    private val roomProductsLiveDataObserver = Observer<List<ProductsEntity>> {
         productsListener.value = DataState(it)
     }
 
-    override fun fetchProducts() {
-        fetchFromDb()
-        fetchFromRemote()
+    init {
+        setDatabaseEntryListener()
     }
 
-    private fun fetchFromRemote() {
-        productListApi
+    override fun fetchProducts(): Single<List<ProductsEntity>> {
+        return productListApi
             .getBankingProducts()
-            .flatMapCompletable {
-                val products = mapRemoteProducts(it.data.products) { remoteProducts ->
+            .map {
+                mapRemoteProducts(it.data.products) { remoteProducts ->
                     mapNullInputList(remoteProducts) { remoteProduct ->
                         mapRemoteProduct(remoteProduct)
                     }
                 }
-                productDao.insertAllProducts(products)
-                Completable.complete()
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    // Successful response leads to a entry in the room db that triggers
-                    // the live data listener
-                }
-
-                override fun onError(error: Throwable) {
-                    productsListener.value =
-                        ErrorState(error, null)
-                }
-
-                override fun onSubscribe(disposable: Disposable) {
-                    productsListener.value =
-                        LoadingState(null)
-                }
-            })
     }
 
-    private fun fetchFromDb() {
-        if (!roomProductsLiveData.hasActiveObservers()) {
-            roomProductsLiveData.observeForever(roomProductsLiveDataObserver)
+    private fun setDatabaseEntryListener() {
+        if (roomProductsLiveData?.hasActiveObservers() == false) {
+            roomProductsLiveData?.observeForever(roomProductsLiveDataObserver)
         }
     }
 
@@ -85,6 +62,17 @@ class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductL
      * Unsubscribe and clear the resources.
      */
     override fun onCleared() {
-        roomProductsLiveData.removeObserver(roomProductsLiveDataObserver)
+        roomProductsLiveData?.removeObserver(roomProductsLiveDataObserver)
+        disposable?.let {
+            if (!it.isDisposed) {
+                it.dispose()
+            }
+        }
+    }
+
+    override fun cache(products: List<ProductsEntity>) {
+        disposable = Observable.fromCallable {
+            productDao.insertAllProducts(products)
+        }.subscribeOn(Schedulers.io()).subscribe()
     }
 }

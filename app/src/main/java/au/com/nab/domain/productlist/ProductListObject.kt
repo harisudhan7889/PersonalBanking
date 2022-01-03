@@ -5,6 +5,6 @@ import au.com.nab.domain.common.Product
 /**
  *@author Hari Hara Sudhan. N
  */
-data class ProductObject(val data: Data)
+data class ProductListObject(val data: Data)
 
 data class Data(val products: List<Product>?)

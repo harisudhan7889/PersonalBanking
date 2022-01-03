@@ -1,6 +1,6 @@
 package au.com.nab.framework.productdetail
 
-import au.com.nab.domain.productdetail.ProductDetailObject
+import au.com.nab.domain.productdetail.ProductDetail
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,5 +12,5 @@ import retrofit2.http.Path
  */
 interface ProductDetailApi {
     @GET("/cds-au/v1/banking/products/{productId}")
-    fun getProductById(@Path("productId") productId: String): Single<ProductDetailObject>
+    fun getProductById(@Path("productId") productId: String): Single<ProductDetail>
 }

@@ -1,6 +1,7 @@
 package au.com.nab.data.productdetail
 
 import au.com.nab.data.DataSource
+import io.reactivex.Single
 
 /**
  *@author Hari Hara Sudhan. N
@@ -16,5 +17,5 @@ interface ProductDetailDataSource<O> : DataSource<O> {
      *
      * @param id - Product Id
      */
-    fun fetchProductById(id: String)
+    fun fetchProductById(id: String): Single<O>
 }

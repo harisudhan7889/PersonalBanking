@@ -5,15 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import au.com.nab.data.productdetail.ProductDetailDataSource
 import au.com.nab.domain.common.DataState
-import au.com.nab.domain.common.ErrorState
-import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
-import au.com.nab.framework.ProductData
+import au.com.nab.framework.DbProductEncapsuler
 import au.com.nab.framework.ProductsDao
 import au.com.nab.framework.utility.ObjectMapper
-import io.reactivex.Completable
-import io.reactivex.CompletableObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -25,84 +22,34 @@ import javax.inject.Inject
  */
 class ProductDetailSourceImpl @Inject constructor(val productDetailApi: ProductDetailApi,
                                                   val productDao: ProductsDao):
-    ProductDetailDataSource<ViewState<ProductData>> {
+    ProductDetailDataSource<DbProductEncapsuler> {
 
-    private val productListener = MutableLiveData<ViewState<ProductData>>()
+    private val productListener = MutableLiveData<ViewState<DbProductEncapsuler>>()
 
-    private var dbProductObserver: LiveData<ProductData>? = null
+    private var dbProductObserver: LiveData<DbProductEncapsuler>? = null
 
-    private val roomProductObserver = Observer<ProductData>{
+    private var disposable: Disposable? = null
+
+    private val roomProductObserver = Observer<DbProductEncapsuler>{
         productListener.value = DataState(it)
     }
 
-    override fun fetchProductById(productId: String) {
-        fetchProductFromDb(productId)
-        fetchProductFromRemote(productId)
+    override fun fetchProductById(id: String): Single<DbProductEncapsuler> {
+        fetchProductFromDb(id)
+        return fetchProductFromRemote(id)
     }
 
     private fun fetchProductFromDb(productId: String) {
         dbProductObserver = productDao.readProductById(productId)
-        dbProductObserver?.observeForever(roomProductObserver)
+        if (dbProductObserver?.hasActiveObservers() == false) {
+            dbProductObserver?.observeForever(roomProductObserver)
+        }
     }
 
-    private fun fetchProductFromRemote(productId: String) {
-        productDetailApi.getProductById(productId).flatMapCompletable {
-            val product = ObjectMapper.mapRemoteProduct(it.data)
-
-            val productFeature =
-                ObjectMapper.mapRemoteProductFeatures(it.data.features) { remoteFeatures ->
-                    ObjectMapper.mapNullInputList(remoteFeatures) { remoteFeature ->
-                        ObjectMapper.mapRemoteFeature(productId, remoteFeature)
-                    }
-                }
-
-            val productFee = ObjectMapper.mapRemoteProductFees(it.data.fees) { remoteFees ->
-                ObjectMapper.mapNullInputList(remoteFees) { remoteFee ->
-                    ObjectMapper.mapRemoteFee(productId, remoteFee)
-                }
-            }
-
-            val productEligibility =
-                ObjectMapper.mapRemoteProductEligibility(it.data.eligibility) { remoteEligibilities ->
-                    ObjectMapper.mapNullInputList(remoteEligibilities) { remoteEligibility ->
-                        ObjectMapper.mapRemoteEligibility(productId, remoteEligibility)
-                    }
-                }
-
-            val productLendingRates =
-                ObjectMapper.mapRemoteProductLendingRate(it.data.lendingRates) { remoteLendingRates ->
-                    ObjectMapper.mapNullInputList(remoteLendingRates) { remoteLendingRate ->
-                        ObjectMapper.mapRemoteLendingRate(productId, remoteLendingRate)
-                    }
-                }
-
-            productDao.insertProductDetails(
-                product,
-                productFee,
-                productFeature,
-                productEligibility,
-                productLendingRates
-            )
-            Completable.complete()
+    private fun fetchProductFromRemote(productId: String): Single<DbProductEncapsuler> {
+        return productDetailApi.getProductById(productId).map {
+            ObjectMapper.mapRemoteToLocalProduct(it.data)
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-
-                }
-
-                override fun onSubscribe(disposable: Disposable) {
-                    productListener.value =
-                        LoadingState(null)
-                }
-
-                override fun onError(error: Throwable) {
-                    productListener.value =
-                        ErrorState(error, null)
-                }
-
-            })
     }
 
     override fun getObserver() = productListener
@@ -111,8 +58,25 @@ class ProductDetailSourceImpl @Inject constructor(val productDetailApi: ProductD
      * Unsubscribe and clear the resources.
      */
     override fun onCleared() {
-        dbProductObserver?.run{
+        dbProductObserver?.run {
             removeObserver(roomProductObserver)
         }
+        disposable?.let {
+            if (!it.isDisposed) {
+                it.dispose()
+            }
+        }
+    }
+
+    override fun cache(item: DbProductEncapsuler) {
+        disposable = Observable.fromCallable {
+            productDao.insertProductDetails(
+                item.productsEntity,
+                item.fees,
+                item.features,
+                item.eligibility,
+                item.lendingRate
+            )
+        }.subscribeOn(Schedulers.io()).subscribe()
     }
 }

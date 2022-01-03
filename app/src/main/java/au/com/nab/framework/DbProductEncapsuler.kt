@@ -6,7 +6,7 @@ import androidx.room.Relation
 /**
  * @author Hari Hara Sudhan. N
  */
-class ProductData {
+class DbProductEncapsuler {
 
     @Embedded lateinit var productsEntity: ProductsEntity
 

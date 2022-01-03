@@ -1,6 +1,7 @@
 package au.com.nab.data.productlist
 
 import au.com.nab.data.DataSource
+import io.reactivex.Single
 
 /**
  *@author Hari Hara Sudhan. N
@@ -14,5 +15,5 @@ interface ProductListDataSource<O>: DataSource<O> {
       * Fetching can be either remote network
       * or local database call.
       */
-     fun fetchProducts()
+     fun fetchProducts(): Single<O>
 }
