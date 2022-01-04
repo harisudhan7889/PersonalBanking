@@ -37,7 +37,7 @@ object ObjectMapper {
         return mapRemoteProductFeatures(remoteProductFeatures)
     }
 
-    private fun mapRemoteFeature(productId: String, remoteFeature: au.com.nab.domain.common.Feature): Feature {
+    fun mapRemoteFeature(productId: String, remoteFeature: au.com.nab.domain.common.Feature): Feature {
         return remoteFeature.run {
             Feature("$productId:feature:${featureType.orEmpty()}", productId, featureType.orEmpty(),
                 additionalInfo.orEmpty(),
@@ -51,7 +51,7 @@ object ObjectMapper {
         return mapRemoteProductFees(remoteProductFees)
     }
 
-    private fun mapRemoteFee(productId: String, remoteFee: au.com.nab.domain.common.Fee): Fee {
+    fun mapRemoteFee(productId: String, remoteFee: au.com.nab.domain.common.Fee): Fee {
         return remoteFee.run {
             Fee("$productId:fee:$feeType", productId, name.orEmpty(),
                 feeType.orEmpty(),
@@ -72,7 +72,7 @@ object ObjectMapper {
         return mapRemoteProductEligibility(remoteProductEligibility)
     }
 
-    private fun mapRemoteEligibility(productId: String, remoteEligibility: au.com.nab.domain.common.Eligibility): Eligibility {
+    fun mapRemoteEligibility(productId: String, remoteEligibility: au.com.nab.domain.common.Eligibility): Eligibility {
         return remoteEligibility.run {
             Eligibility("$productId:eligibility:${eligibilityType.orEmpty()}", productId, eligibilityType.orEmpty(),
                 additionalValue.orEmpty(), additionalInfo.orEmpty())
@@ -86,7 +86,7 @@ object ObjectMapper {
         return mapRemoteProductLendingRates(remoteProductLendingRates)
     }
 
-    private fun mapRemoteLendingRate(productId: String, remoteLendingRate: au.com.nab.domain.common.LendingRate): LendingRate {
+    fun mapRemoteLendingRate(productId: String, remoteLendingRate: au.com.nab.domain.common.LendingRate): LendingRate {
         return remoteLendingRate.run {
             LendingRate("$productId:rate:${lendingRateType.orEmpty()}", productId,
                 lendingRateType.orEmpty(), rate.orEmpty(),
