@@ -27,19 +27,14 @@ class ProductListDataSourceImplTest {
 
     @Mock
     lateinit var productListApi: ProductListApi
-
     @Mock
     lateinit var productListDao: ProductsDao
 
     lateinit var productListDataSourceImpl: ProductListDataSourceImpl
-    lateinit var productListRepository: ProductListRepository
 
     @Before
     fun setUp() {
         productListDataSourceImpl = ProductListDataSourceImpl(productListApi, productListDao)
-        productListRepository = ProductListRepository(productListDataSourceImpl)
-        //RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
-        //RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
     }
 
     @Test

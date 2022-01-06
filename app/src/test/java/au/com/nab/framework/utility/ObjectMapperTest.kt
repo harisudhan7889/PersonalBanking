@@ -4,6 +4,9 @@ import au.com.nab.domain.common.*
 import org.junit.Assert
 import org.junit.Test
 
+/**
+ * @author Hari Hara Sudhan. N
+ */
 class ObjectMapperTest {
 
     private val productId = "Product_1"

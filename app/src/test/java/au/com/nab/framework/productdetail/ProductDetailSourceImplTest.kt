@@ -20,17 +20,14 @@ class ProductDetailSourceImplTest {
 
     @Mock
     lateinit var productDetailApi: ProductDetailApi
-
     @Mock
     lateinit var productsDao: ProductsDao
 
     var productDetailDataSourceImpl: ProductDetailSourceImpl? = null
-    var productListRepository: ProductDetailRepository? = null
 
     @Before
     fun setUp() {
         productDetailDataSourceImpl = ProductDetailSourceImpl(productDetailApi, productsDao)
-        productListRepository = ProductDetailRepository(productDetailDataSourceImpl!!)
     }
 
     @Test
@@ -58,7 +55,7 @@ class ProductDetailSourceImplTest {
     fun fetchProductByIdWithUnHandledException() {
         // Expectation
         Mockito.`when`(productDetailApi.getProductById("1")).thenReturn(
-            Single.error(StackOverflowError(""))
+            Single.error(StackOverflowError())
         )
 
         val testObserver = productDetailDataSourceImpl!!.fetchProductById("1").test()
@@ -73,6 +70,5 @@ class ProductDetailSourceImplTest {
     @After
     fun tearDown() {
         productDetailDataSourceImpl = null
-        productListRepository = null
     }
 }

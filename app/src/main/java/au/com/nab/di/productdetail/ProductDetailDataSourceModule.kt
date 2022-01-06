@@ -1,7 +1,6 @@
 package au.com.nab.di.productdetail
 
 import au.com.nab.framework.ProductsDao
-import au.com.nab.framework.productdetail.ProductDetailRepository
 import au.com.nab.framework.productdetail.ProductDetailApi
 import au.com.nab.framework.productdetail.ProductDetailSourceImpl
 import dagger.Module
@@ -18,20 +17,13 @@ import javax.inject.Singleton
  */
 @Module(includes = [ProductDetailApiModule::class])
 @InstallIn(SingletonComponent::class)
-object ProductDetailRepoModule {
-
+object ProductDetailDataSourceModule {
     @Provides
     @Singleton
-    fun provideProductDetailRepository(productDetailDataSource: ProductDetailSourceImpl): ProductDetailRepository {
-        return ProductDetailRepository(
-            productDetailDataSource
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideProductDetailDataSource(productDetailApi: ProductDetailApi,
-                                       productsDao: ProductsDao): ProductDetailSourceImpl {
+    fun provideProductDetailDataSource(
+        productDetailApi: ProductDetailApi,
+        productsDao: ProductsDao
+    ): ProductDetailSourceImpl {
         return ProductDetailSourceImpl(productDetailApi, productsDao)
     }
 }

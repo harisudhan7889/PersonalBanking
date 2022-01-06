@@ -3,24 +3,26 @@ package au.com.nab.framework.productlist
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import au.com.nab.data.productlist.ProductListDataSource
 import au.com.nab.domain.common.DataState
 import au.com.nab.domain.common.ErrorState
 import au.com.nab.domain.common.LoadingState
 import au.com.nab.domain.common.ViewState
 import au.com.nab.framework.ProductsEntity
+import au.com.nab.framework.scheduler.BaseScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * @author Hari Hara Sudhan. N
  */
 @HiltViewModel
-class ProductListViewModel @Inject constructor(val productListRepository: ProductListRepository,
-                                               val productListGroup: ProductListGroup): ViewModel() {
+class ProductListViewModel @Inject constructor(val productListDataSource: ProductListDataSource<List<ProductsEntity>>,
+                                               val productListGroup: ProductListGroup,
+                                               val scheduler: BaseScheduler
+): ViewModel() {
 
     private val productsGroupedLiveData = MutableLiveData<ViewState<Map<String, List<ProductsEntity>>>>()
 
@@ -39,8 +41,8 @@ class ProductListViewModel @Inject constructor(val productListRepository: Produc
     }
 
     fun execute() {
-        productListRepository.fetchProducts().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        productListDataSource.fetchProducts().subscribeOn(scheduler.getIoScheduler())
+            .observeOn(scheduler.getMainThread())
             .subscribe(object : SingleObserver<List<ProductsEntity>> {
                 override fun onError(error: Throwable) {
                     getProductsObserver().value =
@@ -51,7 +53,7 @@ class ProductListViewModel @Inject constructor(val productListRepository: Produc
                         LoadingState(null)
                 }
                 override fun onSuccess(products: List<ProductsEntity>) {
-                    productListRepository.cacheProducts(products)
+                    productListDataSource.cache(products)
                 }
             })
     }
@@ -59,7 +61,7 @@ class ProductListViewModel @Inject constructor(val productListRepository: Produc
     /**
      * Gets the products without any grouping. Raw product list.
      */
-    fun getProductsObserver(): MutableLiveData<ViewState<List<ProductsEntity>>> = productListRepository.getObserver()
+    fun getProductsObserver(): MutableLiveData<ViewState<List<ProductsEntity>>> = productListDataSource.getObserver()
 
     /**
      * Get the products grouped by category.
@@ -70,6 +72,6 @@ class ProductListViewModel @Inject constructor(val productListRepository: Produc
     }
 
     override fun onCleared() {
-        productListRepository.onCleared()
+        productListDataSource.onCleared()
     }
 }

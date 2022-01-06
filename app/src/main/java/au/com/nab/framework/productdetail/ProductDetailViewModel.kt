@@ -15,10 +15,11 @@ import javax.inject.Inject
  * @author Hari Hara Sudhan. N
  */
 @HiltViewModel
-class ProductDetailViewModel @Inject constructor(val productDetailRepository: ProductDetailRepository) :
+class ProductDetailViewModel @Inject constructor(val productDetailSourceImpl: ProductDetailSourceImpl) :
     ViewModel() {
+
     fun execute(productId: String) {
-        productDetailRepository.fetchProductById(productId).subscribeOn(Schedulers.io())
+        productDetailSourceImpl.fetchProductById(productId).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : SingleObserver<DbProductEncapsuler> {
 
@@ -31,13 +32,13 @@ class ProductDetailViewModel @Inject constructor(val productDetailRepository: Pr
                 }
 
                 override fun onSuccess(product: DbProductEncapsuler) {
-                    productDetailRepository.cacheProduct(product)
+                    productDetailSourceImpl.cache(product)
                 }
 
             })
     }
 
-    fun getProductDetailListener() = productDetailRepository.getObserver()
+    fun getProductDetailListener() = productDetailSourceImpl.getObserver()
 
-    override fun onCleared() = productDetailRepository.onCleared()
+    override fun onCleared() = productDetailSourceImpl.onCleared()
 }
