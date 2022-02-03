@@ -1,6 +1,6 @@
 package au.com.nab.framework.productlist
 
-import au.com.nab.domain.productlist.ProductObject
+import au.com.nab.domain.productlist.ProductListObject
 import io.reactivex.Single
 import retrofit2.http.GET
 
@@ -9,5 +9,5 @@ import retrofit2.http.GET
  */
 interface ProductListApi {
     @GET("cds-au/v1/banking/products")
-    fun getBankingProducts(): Single<ProductObject>
+    fun getBankingProducts(): Single<ProductListObject>
 }

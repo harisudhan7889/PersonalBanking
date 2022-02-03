@@ -1,13 +1,21 @@
 package au.com.nab.data.productdetail
 
-import androidx.lifecycle.MutableLiveData
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productdetail.ProductDetailObject
+import au.com.nab.data.DataSource
+import io.reactivex.Single
 
 /**
  *@author Hari Hara Sudhan. N
  */
-interface ProductDetailDataSource {
-    fun fetchProductById(id: String)
-    fun getLifeCycleAwareListener(): MutableLiveData<ViewState<ProductDetailObject>>
+interface ProductDetailDataSource<O> : DataSource<O> {
+    /**
+     * Can fetch product with the Product Id.
+     * It does not return object as this should be
+     * an asynchronous background task.
+     *
+     * Fetching can be either remote network
+     * or local database call.
+     *
+     * @param id - Product Id
+     */
+    fun fetchProductById(id: String): Single<O>
 }

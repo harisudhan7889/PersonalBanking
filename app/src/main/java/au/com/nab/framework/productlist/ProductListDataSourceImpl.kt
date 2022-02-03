@@ -1,51 +1,78 @@
 package au.com.nab.framework.productlist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import au.com.nab.data.productlist.ProductListDataSource
-import au.com.nab.domain.DataState
-import au.com.nab.domain.ErrorState
-import au.com.nab.domain.LoadingState
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productlist.ProductObject
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
+import au.com.nab.domain.common.DataState
+import au.com.nab.domain.common.ViewState
+import au.com.nab.framework.ProductsDao
+import au.com.nab.framework.ProductsEntity
+import au.com.nab.framework.utility.ObjectMapper.mapNullInputList
+import au.com.nab.framework.utility.ObjectMapper.mapRemoteProduct
+import au.com.nab.framework.utility.ObjectMapper.mapRemoteProducts
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
- * Framework layer where implementation will be happen
+ * Class that implements the abstract source defined in the inner domain layer.
  *
  * @author Hari Hara Sudhan. N
  */
-class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductListApi):
-    ProductListDataSource {
+open class ProductListDataSourceImpl @Inject constructor(val productListApi: ProductListApi,
+                                                    val productDao: ProductsDao)
+    : ProductListDataSource<List<ProductsEntity>> {
 
-    private val productsListener = MutableLiveData<ViewState<ProductObject>>()
+    private val productsListener = MutableLiveData<ViewState<List<ProductsEntity>>>()
+    private var roomProductsLiveData: LiveData<List<ProductsEntity>>? = productDao.readAllProducts()
+    private var disposable: Disposable? = null
 
-    override fun fetchProducts() {
-        productListApi.getBankingProducts().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<ProductObject> {
-                override fun onSuccess(response: ProductObject) {
-                    productsListener.value =
-                        DataState(response)
-                }
-
-                override fun onError(error: Throwable) {
-                    productsListener.value =
-                        ErrorState(error, null)
-                }
-
-                override fun onSubscribe(disposable: Disposable) {
-                    productsListener.value = LoadingState(null)
-                }
-            })
+    private val roomProductsLiveDataObserver = Observer<List<ProductsEntity>> {
+        productsListener.value = DataState(it)
     }
 
-    override fun saveProducts(productObject: ProductObject) {
-
+    init {
+        setDatabaseEntryListener()
     }
 
-    override fun getLifeCycleAwareListener() = productsListener
+    override fun fetchProducts(): Single<List<ProductsEntity>> {
+        return productListApi
+            .getBankingProducts()
+            .map {
+                mapRemoteProducts(it.data.products) { remoteProducts ->
+                    mapNullInputList(remoteProducts) { remoteProduct ->
+                        mapRemoteProduct(remoteProduct)
+                    }
+                }
+            }
+    }
+
+    private fun setDatabaseEntryListener() {
+        if (roomProductsLiveData?.hasActiveObservers() == false) {
+            roomProductsLiveData?.observeForever(roomProductsLiveDataObserver)
+        }
+    }
+
+    override fun getObserver() =  productsListener
+
+    /**
+     * Unsubscribe and clear the resources.
+     */
+    override fun onCleared() {
+        roomProductsLiveData?.removeObserver(roomProductsLiveDataObserver)
+        disposable?.let {
+            if (!it.isDisposed) {
+                it.dispose()
+            }
+        }
+    }
+
+    override fun cache(products: List<ProductsEntity>) {
+        disposable = Observable.fromCallable {
+            productDao.insertAllProducts(products)
+        }.subscribeOn(Schedulers.io()).subscribe()
+    }
 }

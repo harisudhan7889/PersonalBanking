@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">PersonalBanking</string>
+    <string name="app_name">NAB Products</string>
+    <string name="fee_text">%1$d %2$s</string>
+    <string name="fee_label">FEE</string>
+    <string name="eligibility_label">ELIGIBILITY</string>
+    <string name="eligibility_description_label">To apply, you must be:</string>
+    <string name="rate_label">RATE</string>
+    <string name="rate_variable_rate_label">Variable rate loan</string>
+    <string name="rate_fixed_rate_label">Fixed rate loan</string>
+    <string name="rate_interest_rate_label">Interest rate</string>
+    <string name="rate_comparison_rate_label">Comparison rate</string>
+    <string name="feature_label">FEATURE</string>
+    <string name="more">Find out more</string>
+    <string name="nab_product_list_title">NAB Products</string>
+    <string name="nab_products_tag_line">Welcome to our products</string>
 </resources>

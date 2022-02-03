@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productCategoryGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_gravity="center"
+        style="?android:attr/progressBarStyle"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nab_progress_bar_height" />
+
+</FrameLayout>

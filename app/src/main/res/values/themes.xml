@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LightTheme" parent="AppTheme.Light.NoActionBar">
+        <item name="nabToolbarScrimColor">#28313b</item>
+        <item name="nabToolbarBackground">@drawable/bg_cut</item>
+        <item name="nabExpandedTitleAppearance">@style/AppTheme.Light.ExpandedToolbarTitle</item>
+        <item name="nabCollapseToolbarImage">@drawable/ic_nab_logo</item>
+        <item name="nabAppBarElevation">0dp</item>
+        <item name="nabAppBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="nabDrawableCut">@drawable/bg_layout_cut</item>
+        <item name="nabProductItemTitleColor">@android:color/darker_gray</item>
+        <item name="nabItemNumberLabelStyle">@style/AppTheme.Light.NumberLabel</item>
+        <item name="nabItemTextLabelStyle">@style/AppTheme.Light.Text</item>
+        <item name="nabItemBackground">@drawable/border_black_product_fee</item>
+        <item name="nabItemLabelStyle">@style/AppTheme.Light.Label</item>
+        <item name="nabProductButtonStyle">@style/AppTheme.Light.Button</item>
+        <item name="nabProductDescriptionStyle">@style/AppTheme.ProductDescription</item>
+        <item name="nabHorizontalDividerLine">@style/AppTheme.HorizontalDivider</item>
+        <item name="nabProductTitleStyle">@style/AppTheme.GroupProductLabel</item>
+        <item name="nabProductCategoryTitleStyle">@style/AppTheme.ProductCategoryTitle</item>
+        <item name="nabHomeButton">@style/AppTheme.Light.ToolbarTheme</item>
+        <item name="nabSplashScreenTitle">@style/AppTheme.Light.SplashTitle</item>
+    </style>
+
+</resources>

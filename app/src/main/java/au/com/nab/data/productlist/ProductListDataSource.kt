@@ -1,14 +1,19 @@
 package au.com.nab.data.productlist
 
-import androidx.lifecycle.MutableLiveData
-import au.com.nab.domain.ViewState
-import au.com.nab.domain.productlist.ProductObject
+import au.com.nab.data.DataSource
+import io.reactivex.Single
 
 /**
  *@author Hari Hara Sudhan. N
  */
-interface ProductListDataSource {
-    fun fetchProducts()
-    fun saveProducts(productObject: ProductObject)
-    fun getLifeCycleAwareListener(): MutableLiveData<ViewState<ProductObject>>
+interface ProductListDataSource<O>: DataSource<O> {
+     /**
+      * Can fetch all products.
+      * It does not return object as this should be
+      * an asynchronous background task.
+      *
+      * Fetching can be either remote network
+      * or local database call.
+      */
+     fun fetchProducts(): Single<O>
 }
